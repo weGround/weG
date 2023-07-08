@@ -55,17 +55,19 @@
 
     <LinearLayout
         android:id="@+id/group_list"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows= "true"
+        android:background="#FFFFFF"
         >
 
-        <TextView
-            android:id="@+id/current_group_name"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainer"
+            android:name="com.example.weg.ui.sideSheet.GroupListFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="This is group list view" />
+            android:layout_height="match_parent" />
+
 
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

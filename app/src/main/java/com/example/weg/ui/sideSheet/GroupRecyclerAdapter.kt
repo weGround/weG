@@ -1,5 +1,6 @@
 package com.example.weg.ui.sideSheet
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,9 @@ class GroupRecyclerAdapter(private val groupList: List<GroupRecyclerItem>) : Rec
             Toast.makeText(it.context, "Clicked: ${item.getGroupName()}", Toast.LENGTH_SHORT).show()
         }
         holder.apply {
+            Log.d("TAG", "-----------------")
+            Log.d("TAG", "Bind를 시작합니다!!")
+            Log.d("TAG", "-----------------")
             bind(listener, item)
             itemView.tag = item
         }
@@ -37,10 +41,11 @@ class GroupRecyclerAdapter(private val groupList: List<GroupRecyclerItem>) : Rec
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         private var view: View = v
-        val textView: TextView = v.findViewById(R.id.group_name)
+        private val textView: TextView = v.findViewById(R.id.group_name)
 
         fun bind(listener: View.OnClickListener, item: GroupRecyclerItem) {
-            textView.text = item.getGroupName();
+            textView.text = item.getGroupName()
+            Toast.makeText(view.context, "Clicked: ${item.getGroupName()}", Toast.LENGTH_SHORT).show()
             view.setOnClickListener(listener)
         }
     }
