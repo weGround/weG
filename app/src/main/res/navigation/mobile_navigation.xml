@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_first">
+
+    <fragment
+        android:id="@+id/navigation_first"
+        android:name="com.example.bottomtab.ui.home.FirstFragment"
+        android:label="@string/first_tab"
+        tools:layout="@layout/fragment_first" />
+
+    <fragment
+        android:id="@+id/navigation_second"
+        android:name="com.example.bottomtab.ui.dashboard.DashboardFragment"
+        android:label="@string/second_tab"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_third"
+        android:name="com.example.bottomtab.ui.notifications.NotificationsFragment"
+        android:label="@string/third_tab"
+        tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_fourth"
+        android:name="com.example.bottomtab.ui.notifications.NotificationsFragment"
+        android:label="@string/fourth_tab"
+        tools:layout="@layout/fragment_notifications" />
+</navigation>
