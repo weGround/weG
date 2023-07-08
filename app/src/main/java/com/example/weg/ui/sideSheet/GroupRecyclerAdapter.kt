@@ -18,8 +18,6 @@ class GroupRecyclerAdapter(private val groupList: List<GroupRecyclerItem>) : Rec
         val view = LayoutInflater.from(parent.context).inflate(R.layout.group_recycler_item, parent, false)
         return ViewHolder(view)
     }
-
-
     override fun onBindViewHolder(holder: GroupRecyclerAdapter.ViewHolder, position: Int) {
         val item = groupList[position]
         // it는 클릭된 view를 가르키는 변수
@@ -27,9 +25,6 @@ class GroupRecyclerAdapter(private val groupList: List<GroupRecyclerItem>) : Rec
             Toast.makeText(it.context, "Clicked: ${item.getGroupName()}", Toast.LENGTH_SHORT).show()
         }
         holder.apply {
-            Log.d("TAG", "-----------------")
-            Log.d("TAG", "Bind를 시작합니다!!")
-            Log.d("TAG", "-----------------")
             bind(listener, item)
             itemView.tag = item
         }
