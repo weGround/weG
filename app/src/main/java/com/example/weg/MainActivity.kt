@@ -1,4 +1,4 @@
-package com.example.bottomtab
+package com.example.weg
 
 import android.os.Bundle
 import android.view.Gravity
@@ -14,7 +14,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.bottomtab.databinding.ActivityMainBinding
+import com.example.weg.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

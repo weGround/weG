@@ -1,4 +1,4 @@
-package com.example.bottomtab.ui.sideSheet
+package com.example.weg.ui.sideSheet
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bottomtab.R
-import com.example.bottomtab.databinding.FragmentFirstBinding
-import com.example.bottomtab.databinding.FragmentSideSheetGroupBinding
+import com.example.weg.R
+import com.example.weg.databinding.FragmentFirstBinding
+import com.example.weg.databinding.FragmentSideSheetGroupBinding
 
 
 

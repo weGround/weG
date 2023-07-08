@@ -7,25 +7,25 @@
 
     <fragment
         android:id="@+id/navigation_first"
-        android:name="com.example.bottomtab.ui.home.FirstFragment"
+        android:name="com.example.weg.ui.home.FirstFragment"
         android:label="@string/first_tab"
         tools:layout="@layout/fragment_first" />
 
     <fragment
         android:id="@+id/navigation_second"
-        android:name="com.example.bottomtab.ui.dashboard.DashboardFragment"
+        android:name="com.example.weg.ui.dashboard.DashboardFragment"
         android:label="@string/second_tab"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_third"
-        android:name="com.example.bottomtab.ui.notifications.NotificationsFragment"
+        android:name="com.example.weg.ui.notifications.NotificationsFragment"
         android:label="@string/third_tab"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/navigation_fourth"
-        android:name="com.example.bottomtab.ui.notifications.NotificationsFragment"
+        android:name="com.example.weg.ui.notifications.NotificationsFragment"
         android:label="@string/fourth_tab"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

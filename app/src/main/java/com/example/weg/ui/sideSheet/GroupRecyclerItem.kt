@@ -1,4 +1,4 @@
-package com.example.bottomtab.ui.sideSheet
+package com.example.weg.ui.sideSheet
 
 class GroupRecyclerItem(var groupNameStr: String) {
     fun setGroupName(groupName: String) {

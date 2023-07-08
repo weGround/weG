@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.bottomtab'
+    namespace 'com.example.weg'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.bottomtab"
+        applicationId "com.example.weg"
         minSdk 24
         targetSdk 33
         versionCode 1

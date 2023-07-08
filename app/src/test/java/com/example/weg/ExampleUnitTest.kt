@@ -1,4 +1,4 @@
-package com.example.bottomtab
+package com.example.weg
 
 import org.junit.Test
 

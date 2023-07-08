@@ -1,4 +1,4 @@
-package com.example.bottomtab.ui.notifications
+package com.example.weg.ui.notifications
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.bottomtab.databinding.FragmentNotificationsBinding
+import com.example.weg.databinding.FragmentNotificationsBinding
 
 class NotificationsFragment : Fragment() {
 

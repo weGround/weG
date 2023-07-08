@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">bottomTab</string>
+    <string name="app_name">weG</string>
     <string name="first_tab">Home</string>
     <string name="second_tab">Chat</string>
     <string name="third_tab">Ground</string>

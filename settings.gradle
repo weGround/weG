@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "bottomTab"
+rootProject.name = "weG"
 include ':app'
