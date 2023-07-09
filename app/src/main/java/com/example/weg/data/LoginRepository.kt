@@ -1,5 +1,7 @@
 package com.example.weg.data
 
+import android.content.Context
+import android.widget.Toast
 import com.example.weg.data.model.LoggedInUser
 import com.example.weg.ui.login.LoginViewModel
 
@@ -32,10 +34,18 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
         // handle login
         dataSource.login(username, password) {
-            if (it is Result.Success) {
+            loginViewModel.getLoginCheckResult(it);
+            if(it is Result.Success){
                 setLoggedInUser(it.data)
-                loginViewModel.getLoginCheckResult(it);
             }
+
+        }
+    }
+
+    fun signUp(loginViewModel: LoginViewModel, username: String, password: String) {
+        // handle login
+        dataSource.signUp(username, password) {
+            loginViewModel.getSignUpCheckResult(it);
         }
     }
 

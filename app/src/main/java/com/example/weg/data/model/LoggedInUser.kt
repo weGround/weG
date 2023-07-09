@@ -5,5 +5,5 @@ package com.example.weg.data.model
  */
 data class LoggedInUser(
     val userId: String,
-    val displayName: String
+    val userPw: String
 )

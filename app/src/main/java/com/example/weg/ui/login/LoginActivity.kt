@@ -1,6 +1,7 @@
 package com.example.weg.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -27,10 +28,11 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val username = binding.username
-        val password = binding.password
-        val login = binding.login
-        val loading = binding.loading
+        val username = binding.username;
+        val password = binding.password;
+        val login = binding.login;
+        val loading = binding.loading;
+        val signUp = binding.signUp;
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -40,7 +42,9 @@ class LoginActivity : AppCompatActivity() {
 
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
-
+            if (signUp != null) {
+                signUp.isEnabled = loginState.isDataValid
+            }
             if (loginState.usernameError != null) {
                 username.error = getString(loginState.usernameError)
             }
@@ -57,11 +61,25 @@ class LoginActivity : AppCompatActivity() {
                 showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
-                setResult(Activity.RESULT_OK)
-
+//                updateUiWithUser(loginResult.success)
+                // User name 보내기
+                val intent = Intent();
+                intent.putExtra("id", loginResult.success.userId);
+                setResult(Activity.RESULT_OK, intent)
                 //Complete and destroy login activity once successful
                 finish()
+            }
+        })
+
+        loginViewModel.signUpResult.observe(this@LoginActivity, Observer {
+            val signUpResult = it ?: return@Observer
+
+            loading.visibility = View.GONE
+            if (signUpResult.error != null) {
+                showSignUpFailed(signUpResult.error)
+            }
+            if (signUpResult.success != null) {
+                showSignUpSuccess(signUpResult.success)
             }
         })
 
@@ -79,37 +97,51 @@ class LoginActivity : AppCompatActivity() {
                     password.text.toString()
                 )
             }
+        }
+//            setOnEditorActionListener { _, actionId, _ ->
+//                when (actionId) {
+//                    EditorInfo.IME_ACTION_DONE ->
+//                        loginViewModel.login(
+//                            username.text.toString(),
+//                            password.text.toString()
+//                        )
+//                }
+//                false
+//            }
 
-            setOnEditorActionListener { _, actionId, _ ->
-                when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
-                        )
-                }
-                false
-            }
+        login.setOnClickListener {
+            loading.visibility = View.VISIBLE
+            loginViewModel.login(username.text.toString(), password.text.toString())
+        }
 
-            login.setOnClickListener {
+        if (signUp != null) {
+            signUp.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+                loginViewModel.signUp(username.text.toString(), password.text.toString())
             }
         }
     }
 
+
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
+//        val displayName = model.displayName
         // TODO : initiate successful logged in experience
-        Toast.makeText(
-            applicationContext,
-            "$welcome $displayName",
-            Toast.LENGTH_LONG
-        ).show()
+
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+    private fun showSignUpSuccess(model: LoggedInUserView) {
+        Toast.makeText(applicationContext, "Sign Up 성공", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "새로 만든 계정으로 로그인을 시작합니다.", Toast.LENGTH_SHORT).show()
+        binding.loading.visibility = View.VISIBLE
+        loginViewModel.login(binding.username.text.toString(), binding.password.text.toString())
+    }
+
+    private fun showLoginFailed(errorString: String) {
+        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showSignUpFailed(errorString: String) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }

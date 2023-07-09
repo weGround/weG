@@ -1,5 +1,6 @@
 package com.example.weg.ui.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.example.weg.data.Result
 
 import com.example.weg.R
 import com.example.weg.data.model.LoggedInUser
+import java.nio.file.Files.getOwner
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -18,15 +20,34 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
+    private val _signUpResult = MutableLiveData<LoginResult>()
+    val signUpResult: LiveData<LoginResult> = _signUpResult
+
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
         loginRepository.login(this, username, password)
     }
+
+    fun signUp(username: String, password: String) {
+        // can be launched in a separate asynchronous job
+        loginRepository.signUp(this, username, password)
+    }
+
     fun getLoginCheckResult(result: Result<LoggedInUser>){
         if (result is Result.Success) {
-            _loginResult.postValue(LoginResult(success = LoggedInUserView(displayName = result.data.displayName)));
+            _loginResult.postValue(LoginResult(success = LoggedInUserView(userId = result.data.userId)));
         } else {
-            _loginResult.postValue(LoginResult(error = R.string.login_failed));
+            // TODO : exception 종류에 따라 서로 다른 error 지정해줘야함.
+            Log.d("login log", result.toString());
+            _loginResult.postValue(LoginResult(error = result.toString()));
+        }
+    }
+
+    fun getSignUpCheckResult(result: Result<LoggedInUser>){
+        if (result is Result.Success) {
+            _signUpResult.postValue(LoginResult(success = LoggedInUserView(userId = result.data.userId)));
+        } else {
+            _signUpResult.postValue(LoginResult(error = result.toString()));
         }
     }
     fun loginDataChanged(username: String, password: String) {

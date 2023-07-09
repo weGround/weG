@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -20,13 +21,29 @@ import com.example.weg.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding;
+
+    private val requestCode = 123;
+
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val receivedData = result.data?.getStringExtra("id")
+            // 수신된 데이터 처리
+            val welcome = getString(R.string.welcome)
+            Toast.makeText(
+                applicationContext,
+                "$welcome $receivedData",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
 
-        val intent = Intent(this, LoginActivity::class.java);
-        startActivity(intent);
+
+        val intent = Intent(this, LoginActivity::class.java)
+        resultLauncher.launch(intent)
 
         binding = ActivityMainBinding.inflate(layoutInflater);
         setContentView(binding.root);
