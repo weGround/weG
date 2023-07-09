@@ -1,6 +1,7 @@
 package com.example.weg.data
 
 import com.example.weg.data.model.LoggedInUser
+import com.example.weg.ui.login.LoginViewModel
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -27,15 +28,15 @@ class LoginRepository(val dataSource: LoginDataSource) {
         dataSource.logout()
     }
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    fun login(loginViewModel: LoginViewModel, username: String, password: String) {
+
         // handle login
-        val result = dataSource.login(username, password)
-
-        if (result is Result.Success) {
-            setLoggedInUser(result.data)
+        dataSource.login(username, password) {
+            if (it is Result.Success) {
+                setLoggedInUser(it.data)
+                loginViewModel.getLoginCheckResult(it);
+            }
         }
-
-        return result
     }
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {

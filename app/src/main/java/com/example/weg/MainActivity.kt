@@ -1,5 +1,6 @@
 package com.example.weg
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
@@ -15,15 +16,20 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.weg.databinding.ActivityMainBinding
+import com.example.weg.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        super.onCreate(savedInstanceState);
+
+        val intent = Intent(this, LoginActivity::class.java);
+        startActivity(intent);
+
+        binding = ActivityMainBinding.inflate(layoutInflater);
+        setContentView(binding.root);
 
         val navView: BottomNavigationView = binding.navView
 
