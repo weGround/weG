@@ -22,7 +22,9 @@
         android:layout_height="50dp"
         android:id="@+id/group_name"
         android:text="Group Item!!"
+        android:fontFamily="@font/noto_medium"
         android:layout_weight="7"
+        android:includeFontPadding="false"
         android:textSize="30sp" />
 
 </LinearLayout>
