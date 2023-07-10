@@ -1,5 +1,6 @@
 package com.example.weg.ui.home
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.weg.R
 import com.example.weg.databinding.FragmentHomeBinding
 import com.example.weg.databinding.FragmentHomeMainBinding
+import com.example.weg.profileData
 
 
 class HomeMainFragment : Fragment() {
@@ -20,6 +23,11 @@ class HomeMainFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    // member data lists
+    private lateinit var groupName : String;
+    private lateinit var groupIntro : String;
+    private lateinit var groupImage : String;
+    private lateinit var groupMemList : ArrayList<profileData>;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +37,6 @@ class HomeMainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeMainBinding.inflate(inflater, container, false)
 
@@ -40,10 +46,7 @@ class HomeMainFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_android)
         }
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+
         return root
     }
 

@@ -8,6 +8,7 @@ import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import org.json.JSONObject
 import java.io.IOException
 
 /**
@@ -17,10 +18,10 @@ class LoginDataSource {
     fun signUp(username: String, password: String, callback: (Result<LoggedInUser>) -> Unit) {
 
         // TODO: handle loggedInUser authentication
-        val url = "http://172.10.5.148:443/blog"
+        val url = "http://172.10.5.148:443/signup"
         val client = OkHttpClient();
 
-            val requestBody = FormBody.Builder()
+        val requestBody = FormBody.Builder()
                 .add("userid", username)
                 .add("pw", password)
                 .build()
@@ -38,20 +39,32 @@ class LoginDataSource {
 
             override fun onResponse(call: Call, response: Response) {
                 val responseBody: String = response.body?.string() ?: ""
-
-                Log.d("TAG", "login: $responseBody")
-                val signUpUser = LoggedInUser(username, password);
-                callback(Result.Success(signUpUser))
+                val jsonObject = JSONObject(responseBody)
+                val msg = jsonObject.getString("message");
+                if(msg.equals("already exist")){
+                    Log.d("signup failed", "signup: $msg")
+                    callback(Result.Error(IOException(msg)))
+                }else if(msg.equals("signup success")){
+                    Log.d("signup Success", "signup: $msg")
+                    val signUpUser = LoggedInUser(username, password);
+                    callback(Result.Success(signUpUser))
+                }
             }
         })
     }
     fun login(username: String, password: String, callback: (Result<LoggedInUser>) -> Unit) {
 
         // handle loggedInUser authentication
-        val url = "http://172.10.5.148:443/blog"
+        val url = "http://172.10.5.148:443/signup/login"
         val client = OkHttpClient()
+        val requestBody = FormBody.Builder()
+            .add("userid", username)
+            .add("pw", password)
+            .build()
+
         val request = Request.Builder()
             .url(url)
+            .post(requestBody)
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -63,10 +76,17 @@ class LoginDataSource {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody: String = response.body?.string() ?: "";
-                Log.d("TAG", "login: $responseBody");
-                val loginUser = LoggedInUser(username, password);
-                callback(Result.Success(loginUser));
+                val responseBody: String = response.body?.string() ?: ""
+                val jsonObject = JSONObject(responseBody)
+                val msg = jsonObject.getString("message");
+                if(msg.equals("login failed")){
+                    Log.d("Login failed", "login: $msg")
+                    callback(Result.Error(IOException(msg)))
+                }else if(msg.equals("login success")){
+                    Log.d("Login Success", "login: $msg")
+                    val loginUser = LoggedInUser(username, password);
+                    callback(Result.Success(loginUser))
+                }
             }
         })
 
