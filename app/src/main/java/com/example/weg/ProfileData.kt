@@ -1,10 +1,8 @@
 package com.example.weg
 
 import android.graphics.drawable.Drawable
-import androidx.core.content.ContextCompat
-import com.example.weg.ui.home.HomeMemberProfileFragment
 
-class profileData(var userName : String, var userIntro : String, var userImage : Drawable ) {
+class ProfileData(var userName : String, var userIntro : String, var userImage : Drawable? ) {
 
     fun setName(newName : String){
         this.userName = newName;
@@ -22,7 +20,7 @@ class profileData(var userName : String, var userIntro : String, var userImage :
         return this.userIntro;
     }
 
-    fun getImage() :Drawable {
+    fun getImage() :Drawable? {
         return this.userImage;
     }
 
