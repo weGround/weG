@@ -32,7 +32,7 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
     // member data lists
     private lateinit var groupName : String;
     private lateinit var groupIntro : String;
-    private lateinit var groupImage : String;
+    private lateinit var groupImage : Drawable;
     var groupMemList : ArrayList<ProfData> = ArrayList<ProfData>();
 
     override fun onCreate(savedInstanceState: Bundle?) {
