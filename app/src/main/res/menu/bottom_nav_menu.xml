@@ -13,12 +13,8 @@
 
     <item
         android:id="@+id/navigation_third"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_person"
         android:title="@string/third_tab" />
 
-    <item
-        android:id="@+id/navigation_fourth"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/fourth_tab" />
 
 </menu>

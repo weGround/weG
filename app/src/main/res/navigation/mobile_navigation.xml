@@ -12,19 +12,13 @@
 
     <fragment
         android:id="@+id/navigation_second"
-        android:name="com.example.weg.ui.dashboard.DashboardFragment"
+        android:name="com.example.weg.ui.ground.GroundFragment"
         android:label="@string/second_tab"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_ground" />
 
     <fragment
         android:id="@+id/navigation_third"
-        android:name="com.example.weg.ui.notifications.NotificationsFragment"
+        android:name="com.example.weg.ui.profile.ProfileFragment"
         android:label="@string/third_tab"
-        tools:layout="@layout/fragment_notifications" />
-
-    <fragment
-        android:id="@+id/navigation_fourth"
-        android:name="com.example.weg.ui.notifications.NotificationsFragment"
-        android:label="@string/fourth_tab"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_profile" />
 </navigation>
