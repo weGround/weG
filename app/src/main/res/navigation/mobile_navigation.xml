@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_first"
-        android:name="com.example.weg.ui.home.FirstFragment"
+        android:name="com.example.weg.ui.home.HomeFragment"
         android:label="@string/first_tab"
-        tools:layout="@layout/fragment_first" />
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_second"
