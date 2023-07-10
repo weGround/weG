@@ -22,17 +22,17 @@ import com.example.weg.ui.login.LoginActivity
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding;
-
+    private var userId : String? = null;
     private val requestCode = 123;
 
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            val receivedData = result.data?.getStringExtra("id")
+            userId = result.data?.getStringExtra("userId")
             // 수신된 데이터 처리
             val welcome = getString(R.string.welcome)
             Toast.makeText(
                 applicationContext,
-                "$welcome $receivedData",
+                "$welcome $userId",
                 Toast.LENGTH_LONG
             ).show()
         }

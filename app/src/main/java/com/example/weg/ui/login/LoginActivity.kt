@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
 //                updateUiWithUser(loginResult.success)
                 // User name 보내기
                 val intent = Intent();
-                intent.putExtra("id", loginResult.success.userId);
+                intent.putExtra("userId", loginResult.success.userId);
                 setResult(Activity.RESULT_OK, intent)
                 //Complete and destroy login activity once successful
                 finish()
