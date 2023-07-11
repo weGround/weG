@@ -8,40 +8,42 @@ import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 
 class groupDataSource {
-    fun getGroupList(callback: (Result<ArrayList<String>>) -> Unit)  {
-        // TODO: handle loggedInUser authentication
-//        val url = "http://172.10.5.148:443/signup"
-//        val client = OkHttpClient();
-//
-//        val request = Request.Builder()
-//            .url(url)
-//            .build()
-//
-//        client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                e.printStackTrace()
-//                callback(Result.Error(IOException(e.message.toString(), e)))
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                val responseBody: String = response.body?.string() ?: ""
-//                val jsonObject = JSONObject(responseBody)
-//                val groupListArrJson = jsonObject.getJSONArray("mygroup");
+    fun getGroupList(currentUserId:String?, callback: (Result<ArrayList<String>>) -> Unit)  {
+        val url = "http://172.10.5.148:443/signup/getUserMyGroupLists/$currentUserId";
+        Log.d("get Nickname", "This is url : $url")
+        val client = OkHttpClient();
 
+        val request = Request.Builder()
+            .url(url)
+            .build()
 
-//                if(msg.equals("already exist")){
-//                    Log.d("signup failed", "signup: $msg")
-//                    callback(Result.Error(IOException(msg)))
-//                }else if(msg.equals("signup success")){
-//                    Log.d("signup Success", "signup: $msg")
-//                    callback(Result.Success(signUpUser))
-//                }
-//            }
-//        })
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                callback(Result.Error(IOException(e.message.toString(), e)))
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody: String = response.body?.string() ?: ""
+                Log.d("get Nickname", "This is responseBody : $responseBody")
+                try{
+                    val jsonArray = JSONArray(responseBody);
+                    var groupList : ArrayList<String> = ArrayList<String>();
+                    for (i in 0 until jsonArray.length()) {
+                        groupList.add(jsonArray.get(i).toString())
+                    }
+                    callback(Result.Success(groupList));
+                }catch (e:Exception){
+                    callback(Result.Success(ArrayList<String>()));
+                }
+
+            }
+        })
     }
 
     fun addGroup(newGroupName: String, callback: (Result<String>) -> Unit)  {

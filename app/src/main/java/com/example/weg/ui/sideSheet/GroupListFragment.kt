@@ -43,19 +43,21 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
         val drawable : Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.user_icon)
 
         Log.d("TAG", "Create Group list fragment");
-        mList.add(GroupRecyclerItem("Section 1", drawable));
-        mList.add(GroupRecyclerItem("Section 2", drawable));
-        mList.add(GroupRecyclerItem("Section 3", drawable));
-        mList.add(GroupRecyclerItem("Section 4", drawable));
-        mList.add(GroupRecyclerItem("Section 5", drawable));
-        mList.add(GroupRecyclerItem("Section 6", drawable));
-        mList.add(GroupRecyclerItem("Section 7", drawable));
-        mList.add(GroupRecyclerItem("Section 8", drawable));
-        mList.add(GroupRecyclerItem("Section 9", drawable));
-        mList.add(GroupRecyclerItem("Section 10", drawable));
-        binding.groupRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-        updateAdapter();
+//        mList.add(GroupRecyclerItem("Section 1", drawable));
+//        mList.add(GroupRecyclerItem("Section 2", drawable));
+//        mList.add(GroupRecyclerItem("Section 3", drawable));
 
+        val mainActivity = activity as MainActivity;
+        groupDataSource.getGroupList(mainActivity.getUserId()){
+            if(it is Result.Success){
+                for( item in it.data){
+                    mList.add(GroupRecyclerItem(item, drawable));
+                }
+            }
+            activity?.runOnUiThread{
+                updateAdapter();
+            }
+        }
         // Register Button clilck event
         binding.addGroup.setOnClickListener{
             Toast.makeText(activity, "Button Clicked!", Toast.LENGTH_SHORT).show()
@@ -81,6 +83,7 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
         recyclerView = binding.groupRecycler;
         adapter = GroupRecyclerAdapter(mList, this);
         Log.d("TAG", "this is the size of mlist : " + adapter.getItemCount());
+        binding.groupRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         recyclerView.adapter = adapter;
@@ -109,7 +112,8 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
 
     // server로 부터 Group List를 가져와서 idx의 group으로 이동함을 가정하고 나머지를 나열한다.
     fun initGroupList(currentGroupIndex : Int){
-        groupDataSource.getGroupList {
+        val mainActivity = activity as MainActivity;
+        groupDataSource.getGroupList(mainActivity.getUserId()) {
             if(it is Result.Success){
                 mList.clear();
                 for(item in it.data){

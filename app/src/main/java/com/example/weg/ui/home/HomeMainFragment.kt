@@ -58,16 +58,16 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
 //            setDisplayHomeAsUpEnabled(true)
 //            setHomeAsUpIndicator(R.drawable.ic_android)
 //        }
-        groupMemList.add(ProfData("jihwan", "I'm jihwan", null));
-        groupMemList.add(ProfData("yinae", "I'm yinae", null));
-        groupMemList.add(ProfData("jinah", "I'm jinah", null));
-        groupMemList.add(ProfData("yejin", "I'm yejin", null));
-        groupMemList.add(ProfData("OH", "I'm jihwan", null));
-        groupMemList.add(ProfData("Park", "I'm yinae", null));
-        groupMemList.add(ProfData("PARK", "I'm jinah", null));
-        groupMemList.add(ProfData("Kwon", "I'm yejin", null));
+//        groupMemList.add(ProfData("jihwan", "I'm jihwan", null));
+//        groupMemList.add(ProfData("yinae", "I'm yinae", null));
+//        groupMemList.add(ProfData("jinah", "I'm jinah", null));
+//        groupMemList.add(ProfData("yejin", "I'm yejin", null));
+//        groupMemList.add(ProfData("OH", "I'm jihwan", null));
+//        groupMemList.add(ProfData("Park", "I'm yinae", null));
+//        groupMemList.add(ProfData("PARK", "I'm jinah", null));
+//        groupMemList.add(ProfData("Kwon", "I'm yejin", null));
 
-        updateMemListView();
+//        updateMemListView();
 
         val mainActivity = activity as MainActivity;
 
@@ -117,10 +117,6 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
     }
 
     private fun updateMemListView() {
-
-//        if (!recyclerView.isComputingLayout && !recyclerView.isLayoutRequested) {
-//            binding.groupRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.HORIZONTAL))
-//        }
 
         binding.groupRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.HORIZONTAL))
         recyclerView = binding.groupRecycler;
