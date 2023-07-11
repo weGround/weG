@@ -139,6 +139,13 @@ class ProfileFragment : Fragment() {
         val deleteBtn = binding.deleteButton;
         deleteBtn.setOnClickListener {
             Log.d("Button", "삭제 버튼이 클릭되었습니다.")
+            val mainActivity = activity as MainActivity;
+            profileDataSource.exitFromGroup(mainActivity.getUserId(), mainActivity.getCurrentGroup()){
+                if(it is Result.Success){
+                    Toast.makeText(activity, "Exit from here : ${it.data}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
         }
 
         // TODO : user image icon 설정하기
