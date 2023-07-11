@@ -53,4 +53,10 @@ class PostDataSource {
 //            }
 //        })
     }
+
+    fun addNewPost(postWriter:String?, postTitle: String?,postContent: String?,callback: (Result<PostRecyclerItem>) -> Unit) {
+        if(postWriter != null && postTitle != null && postContent != null){
+            callback(Result.Success(PostRecyclerItem(postWriter!!, postTitle!!, postContent!!, ArrayList<String>())));
+        }
+    }
 }

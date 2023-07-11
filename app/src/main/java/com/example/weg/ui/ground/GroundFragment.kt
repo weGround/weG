@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -107,7 +106,7 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
 
     fun onAddClick(){
         Log.d("heyhey", "onAddClick: ");
-        val dialogFragment = PostDialogFragment()
+        val dialogFragment = PostDialogFragment(this);
         dialogFragment.show(childFragmentManager, "Post Dialog")
     }
     override fun onItemClick(position: Int) {
@@ -128,5 +127,14 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
             postLikeView.setImageDrawable(ContextCompat.getDrawable(activityMain, R.drawable.ic_like_fill)!!)
         }
 
+    }
+    fun addNewPost(postTitle:String, postContent:String){
+        val mainActivity = activity as MainActivity;
+        postDataSource.addNewPost(mainActivity.getUserId(), postTitle, postContent) {
+            if(it is Result.Success){
+                postList.add(it.data);
+                updatePostRecyclerView();
+            }
+        }
     }
 }
