@@ -50,7 +50,7 @@ class ProfileFragment : Fragment() {
         val root: View = binding.root;
         val nameText = binding.profileName;
         val editNameText = binding.profileNameEdit;
-
+        val detailText = binding.profileIntro;
 
         binding.profileName.setOnClickListener(View.OnClickListener {
             nameText.visibility =View.GONE
@@ -86,9 +86,9 @@ class ProfileFragment : Fragment() {
                 imm.hideSoftInputFromWindow(editNameText.windowToken, 0);
                 userName = newName;
                 val mainActivity = activity as MainActivity;
-                profileDataSource.modifyUserNickName(userName, mainActivity.getUserId(), mainActivity.getCurrentGroup()){
+                profileDataSource.modifyUserNickName(userName, detailText.text.toString(), mainActivity.getUserId(), mainActivity.getCurrentGroup()){
                     if(it is Result.Success){
-                        Toast.makeText(activity, "Your New Name : ${it.data}", Toast.LENGTH_SHORT).show()
+                        // 이름 변경 성공 처리
                     }
                 }
                 // TODO : data base에 이름 변경 요청보내기
@@ -124,9 +124,9 @@ class ProfileFragment : Fragment() {
                 imm.hideSoftInputFromWindow(profileIntroEdit.windowToken, 0)
                 userIntro = newIntro;
                 val mainActivity = activity as MainActivity;
-                profileDataSource.modifyUserDetail(userIntro, mainActivity.getUserId(), mainActivity.getCurrentGroup()){
+                profileDataSource.modifyUserDetail(userIntro,nameText.text.toString(), mainActivity.getUserId(), mainActivity.getCurrentGroup()){
                     if(it is Result.Success){
-                        Toast.makeText(activity, "Your New Intro : ${it.data}", Toast.LENGTH_SHORT).show()
+                        // user detail 변경 처리
                     }
                 }
                 // TODO : data base에 intro 변경 요청보내기
@@ -142,15 +142,32 @@ class ProfileFragment : Fragment() {
             val mainActivity = activity as MainActivity;
             profileDataSource.exitFromGroup(mainActivity.getUserId(), mainActivity.getCurrentGroup()){
                 if(it is Result.Success){
-                    Toast.makeText(activity, "Exit from here : ${it.data}", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(activity, "Exit from here : ${it.data}", Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
 
         // TODO : user image icon 설정하기
 
+
+        // TODO : User NickName, Detail 동기화
+
         val mainActivity = activity as MainActivity;
+        profileDataSource.getNickname(mainActivity.getUserId(), mainActivity.getCurrentGroup()){
+            if(it is Result.Success){
+                nameText.post{
+                    nameText.text = it.data;
+                }
+
+            }
+        }
+        profileDataSource.getUserDetail(mainActivity.getUserId(), mainActivity.getCurrentGroup()){
+            if(it is Result.Success){
+                detailText.post{
+                    detailText.text = it.data;
+                }
+            }
+        }
 
         val toolbar = mainActivity.findViewById<Toolbar>(R.id.toolbar)
         val menu = toolbar?.menu
