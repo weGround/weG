@@ -67,7 +67,7 @@
                 android:id="@+id/like"
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_like_fill"
+                android:src="@drawable/ic_like_outlined"
                 android:background="#FFFFFF"
                 android:scaleType="centerInside"/>
 ㅓ

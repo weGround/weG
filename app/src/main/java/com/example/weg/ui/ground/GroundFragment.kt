@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -46,7 +48,16 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
         recyclerView.layoutManager = LinearLayoutManager(context);
         recyclerView.adapter = adapter;
 
+        val mainActivity = activity as MainActivity;
 
+        val toolbar = mainActivity.findViewById<Toolbar>(R.id.toolbar)
+        val menu = toolbar.menu
+        val item = menu.findItem(R.id.add_action)
+        if (item != null) {
+            item.isVisible = true
+        }
+
+        
         return root
     }
 

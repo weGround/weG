@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -41,10 +42,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
 
-
-        val intent = Intent(this, LoginActivity::class.java)
-        resultLauncher.launch(intent)
-
         binding = ActivityMainBinding.inflate(layoutInflater);
         setContentView(binding.root);
 
@@ -70,11 +67,21 @@ class MainActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_android)
         }
 
+        val intent = Intent(this, LoginActivity::class.java)
+        resultLauncher.launch(intent)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.actionbar_main_menu, menu)
-        return true
+        menuInflater.inflate(R.menu.actionbar_main_menu, menu);
+        return true;
+    }
+
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val item = menu.findItem(R.id.add_action);
+        item?.isVisible = false;
+        return super.onPrepareOptionsMenu(menu);
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

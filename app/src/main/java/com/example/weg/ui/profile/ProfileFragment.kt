@@ -12,8 +12,11 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
+import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import com.example.weg.MainActivity
 import com.example.weg.R
 import com.example.weg.databinding.FragmentProfileBinding
 
@@ -31,6 +34,8 @@ class ProfileFragment : Fragment() {
     private lateinit var userIntro : String;
     private var userImage : Drawable? = null;
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,6 +46,7 @@ class ProfileFragment : Fragment() {
         val root: View = binding.root;
         val nameText = binding.profileName;
         val editNameText = binding.profileNameEdit;
+
 
         binding.profileName.setOnClickListener(View.OnClickListener {
             nameText.visibility =View.GONE
@@ -121,6 +127,15 @@ class ProfileFragment : Fragment() {
         }
 
         // TODO : user image icon 설정하기
+
+        val mainActivity = activity as MainActivity;
+
+        val toolbar = mainActivity.findViewById<Toolbar>(R.id.toolbar)
+        val menu = toolbar?.menu
+        val item = menu?.findItem(R.id.add_action)
+        if (item != null) {
+            item.isVisible = false;
+        }
         return root
     }
 

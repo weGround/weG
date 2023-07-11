@@ -8,12 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weg.MainActivity
 import com.example.weg.ProfData
 import com.example.weg.R
 import com.example.weg.databinding.FragmentHomeBinding
@@ -68,6 +71,16 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
         Log.d("TAG", "this is the size of groupMemList : " + adapter.getItemCount());
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter;
+
+        val mainActivity = activity as MainActivity;
+
+        val toolbar = mainActivity.findViewById<Toolbar>(R.id.toolbar)
+        val menu = toolbar?.menu;
+        val item = menu?.findItem(R.id.add_action)
+//        val item = toolbar?.findViewById<View>(R.id.add_action)
+        if (item != null) {
+            item.isVisible = false;
+        }
 
         return root
     }
