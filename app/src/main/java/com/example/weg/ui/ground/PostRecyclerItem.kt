@@ -2,7 +2,7 @@ package com.example.weg.ui.ground
 
 
 class PostRecyclerItem(var postWriter: String, var postTitle: String, var postDetail: String, var likeUsers: ArrayList<String>) {
-
+    private var boolean = false;
     fun setPostWriterStr(postWriterStr: String) {
         this.postWriter = postWriterStr;
     }
@@ -14,6 +14,13 @@ class PostRecyclerItem(var postWriter: String, var postTitle: String, var postDe
     }
     fun setLikeUsersList(likeUsersList: ArrayList<String>) {
         this.likeUsers = likeUsersList;
+    }
+    fun addLikeUsers(likeUser: String) {
+        this.likeUsers.add(likeUser);
+    }
+
+    fun deleteLikeUsers(likeUser: String) {
+        this.likeUsers.remove(likeUser);
     }
 
     fun getPostWriterStr(): String {
@@ -28,4 +35,8 @@ class PostRecyclerItem(var postWriter: String, var postTitle: String, var postDe
     fun getLikeUsersList(): ArrayList<String> {
         return likeUsers;
     }
+    fun isLiked(user:String): Boolean{
+        return likeUsers.contains(user);
+    }
+
 }

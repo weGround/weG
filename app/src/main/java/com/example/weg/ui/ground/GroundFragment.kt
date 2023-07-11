@@ -5,15 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageButton
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weg.ProfData
+import com.example.weg.MainActivity
+import com.example.weg.R
 import com.example.weg.databinding.FragmentGroundBinding
-import com.example.weg.ui.home.HomeMemberRecyclerAdapter
 
 class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
 
@@ -40,12 +40,13 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
         postList.add(PostRecyclerItem("Yejin", "두번째 일기", "집에 보내주세요!", arrayListOf("Apple", "Banana", "Orange")));
 
         binding.postRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-
         recyclerView = binding.postRecycler;
         adapter = PostRecyclerAdapter(postList, this);
         Log.d("TAG", "this is the size of groupMemList : " + adapter.getItemCount());
         recyclerView.layoutManager = LinearLayoutManager(context);
         recyclerView.adapter = adapter;
+
+
         return root
     }
 
@@ -56,5 +57,21 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
 
     override fun onItemClick(position: Int) {
         // TODO("Not yet implemented")
+    }
+    override fun onLikeClick(
+        position: Int,
+        clickedPost: PostRecyclerItem,
+        postLikeView: ImageButton
+    ) {
+        val activityMain = activity as MainActivity;
+        val userId = activityMain.getUserId()!!;
+        if(clickedPost.isLiked(activityMain.getUserId()!!)){
+            clickedPost.deleteLikeUsers(userId);
+            postLikeView.setImageDrawable(ContextCompat.getDrawable(activityMain, R.drawable.ic_like_outlined)!!)
+        }else {
+            clickedPost.addLikeUsers(userId);
+            postLikeView.setImageDrawable(ContextCompat.getDrawable(activityMain, R.drawable.ic_like_fill)!!)
+        }
+
     }
 }

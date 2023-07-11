@@ -94,6 +94,9 @@ class MainActivity : AppCompatActivity() {
         drawerLayout.openDrawer(gravity);
     }
 
+    fun getUserId() : String?{
+        return this.userId;
+    }
 
 }
 

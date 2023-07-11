@@ -64,7 +64,7 @@
             android:layout_marginBottom="15dp"
             >
             <ImageButton
-                android:id="@+id/call_btn"
+                android:id="@+id/like"
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_like_fill"

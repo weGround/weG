@@ -3,11 +3,9 @@ package com.example.weg.ui.ground
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weg.ProfData
 import com.example.weg.R
 
 
@@ -22,6 +20,7 @@ class PostRecyclerAdapter(private val postList: ArrayList<PostRecyclerItem>, pri
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
+        fun onLikeClick(position: Int, postLikeView: PostRecyclerItem, postLikeView1: ImageButton)
     }
 
     override fun onBindViewHolder(holder: PostRecyclerAdapter.ViewHolder, position: Int) {
@@ -33,6 +32,9 @@ class PostRecyclerAdapter(private val postList: ArrayList<PostRecyclerItem>, pri
         holder.apply {
             bind(listener, item)
             itemView.tag = item
+            postLikeView.setOnClickListener{
+                onItemClickListener.onLikeClick(position, item, postLikeView);
+            }
         }
     }
 
@@ -45,6 +47,7 @@ class PostRecyclerAdapter(private val postList: ArrayList<PostRecyclerItem>, pri
         private val postWriterView: TextView = v.findViewById(R.id.post_writer);
         private val postTitleView: TextView = v.findViewById(R.id.post_title);
         private val postDetailView: TextView = v.findViewById(R.id.post_detail);
+        val postLikeView: ImageButton = v.findViewById(R.id.like);
         private val postLikesNumView: TextView = v.findViewById(R.id.post_likes_num);
         fun bind(listener: View.OnClickListener, item: PostRecyclerItem) {
             postWriterView.text = item.getPostWriterStr();
