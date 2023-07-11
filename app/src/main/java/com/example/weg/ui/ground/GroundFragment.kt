@@ -96,6 +96,8 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
 
     fun onAddClick(){
         Log.d("heyhey", "onAddClick: ");
+        val dialogFragment = PostDialogFragment()
+        dialogFragment.show(childFragmentManager, "Post Dialog")
     }
     override fun onItemClick(position: Int) {
         // TODO("Not yet implemented")
