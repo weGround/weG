@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -56,6 +57,8 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
                 for(item in it.data){
                     postList.add(item);
                 }
+            }
+            activity?.runOnUiThread {
                 updatePostRecyclerView();
             }
         }
@@ -80,7 +83,8 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
     private fun updatePostRecyclerView(){
         binding.postRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         recyclerView = binding.postRecycler;
-        adapter = PostRecyclerAdapter(postList, this);
+        val mainActivity = activity as MainActivity;
+        adapter = PostRecyclerAdapter(mainActivity.getUserId(), postList, this);
         Log.d("TAG", "this is the size of groupMemList : " + adapter.getItemCount());
         recyclerView.layoutManager = LinearLayoutManager(context);
         recyclerView.adapter = adapter;
@@ -115,15 +119,20 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
     override fun onLikeClick(
         position: Int,
         clickedPost: PostRecyclerItem,
-        postLikeView: ImageButton
+        postLikeView: ImageButton,
+        postLikeNumView: TextView
     ) {
         val activityMain = activity as MainActivity;
         val userId = activityMain.getUserId()!!;
         if(clickedPost.isLiked(activityMain.getUserId()!!)){
             clickedPost.deleteLikeUsers(userId);
+            val temp:Int = postLikeNumView.text.toString().toInt() - 1;
+            postLikeNumView.text = temp.toString();
             postLikeView.setImageDrawable(ContextCompat.getDrawable(activityMain, R.drawable.ic_like_outlined)!!)
         }else {
             clickedPost.addLikeUsers(userId);
+            val temp:Int = postLikeNumView.text.toString().toInt() + 1;
+            postLikeNumView.text = temp.toString();
             postLikeView.setImageDrawable(ContextCompat.getDrawable(activityMain, R.drawable.ic_like_fill)!!)
         }
 

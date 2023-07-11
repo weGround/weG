@@ -97,19 +97,22 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
                     binding.groupInfo.text = it.data;
                 }
             }
-            homeDataSource.getGroupMem(newGroupName){ result ->
-                if(result is Result.Success){
-                    groupMemList.clear();
-                    for(item in result.data) {
+            homeDataSource.getGroupMem(newGroupName) { result ->
+                if (result is Result.Success) {
+                    groupMemList.clear()
+                    for (item in result.data) {
                         homeDataSource.getUserDetail(item) {
-                            if(it is Result.Success){
+                            if (it is Result.Success) {
                                 groupMemList.add(ProfData(item, it.data, null))
                             }
                         }
                     }
                 }
-                updateMemListView();
+                activity?.runOnUiThread {
+                    updateMemListView()
+                }
             }
+
         }
     }
 

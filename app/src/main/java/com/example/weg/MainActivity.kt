@@ -137,6 +137,4 @@ class MainActivity : AppCompatActivity() {
         val homeMainFragment = homeFragment.childFragmentManager.findFragmentById(R.id.fragmentContainer) as HomeMainFragment;
         homeMainFragment.onGroupChanged(newGroupName);
     }
-
 }
-

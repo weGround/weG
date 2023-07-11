@@ -15,15 +15,15 @@ class PostDataSource {
             callback(Result.Error(IOException()));
         }else {
             var postList: ArrayList<PostRecyclerItem> = ArrayList<PostRecyclerItem>();
-            postList.add(PostRecyclerItem("Jihwan", "오늘의 한줄", "과연 내가 이걸 완성할 수 있을까", arrayListOf("사람1","사람2", "사람3", "사람4")));
+            postList.add(PostRecyclerItem("Jihwan", "오늘의 한줄", "과연 내가 이걸 완성할 수 있을까", arrayListOf("jihwan","사람2", "사람3", "사람4")));
             postList.add(PostRecyclerItem("Yejin", "오늘의 한줄", "밥 먹었으니까 3시간 뒤에 잘거야", arrayListOf("사람1","사람2", "사람3", "사람4")));
-            postList.add(PostRecyclerItem("SeungJong", "오늘의 한줄", "오늘은 질문하는 학생들이 적구나", arrayListOf("사람1","사람2", "사람3", "사람4")));
+            postList.add(PostRecyclerItem("SeungJong", "오늘의 한줄", "오늘은 질문하는 학생들이 적구나", arrayListOf("사람1","jihwan", "사람3", "사람4")));
             postList.add(PostRecyclerItem("Jihwan", "오늘의 한줄", "과연 내가 이걸 완성할 수 있을까", arrayListOf("사람1","사람2", "사람3", "사람4")));
-            postList.add(PostRecyclerItem("Yejin", "오늘의 한줄", "밥 먹었으니까 3시간 뒤에 잘거야", arrayListOf("사람1","사람2", "사람3", "사람4")));
+            postList.add(PostRecyclerItem("Yejin", "오늘의 한줄", "밥 먹었으니까 3시간 뒤에 잘거야", arrayListOf("jihwan","사람2", "사람3", "사람4")));
             postList.add(PostRecyclerItem("SeungJong", "오늘의 한줄", "오늘은 질문하는 학생들이 적구나", arrayListOf("사람1","사람2", "사람3", "사람4")));
-            postList.add(PostRecyclerItem("Jihwan", "오늘의 한줄", "과연 내가 이걸 완성할 수 있을까", arrayListOf("사람1","사람2", "사람3", "사람4")));
-            postList.add(PostRecyclerItem("Yejin", "오늘의 한줄", "밥 먹었으니까 3시간 뒤에 잘거야", arrayListOf("사람1","사람2", "사람3", "사람4")));
-            postList.add(PostRecyclerItem("SeungJong", "오늘의 한줄", "오늘은 질문하는 학생들이 적구나", arrayListOf("사람1","사람2", "사람3", "사람4")));
+            postList.add(PostRecyclerItem("Jihwan", "오늘의 한줄", "과연 내가 이걸 완성할 수 있을까", arrayListOf("사람1","jihwan", "사람3", "사람4")));
+            postList.add(PostRecyclerItem("Yejin", "오늘의 한줄", "밥 먹었으니까 3시간 뒤에 잘거야", arrayListOf("jihwan","사람2", "사람3", "사람4")));
+            postList.add(PostRecyclerItem("SeungJong", "오늘의 한줄", "오늘은 질문하는 학생들이 적구나", arrayListOf("사람1","사람2", "jihwan", "사람4")));
             callback(Result.Success(postList));
         }
 
