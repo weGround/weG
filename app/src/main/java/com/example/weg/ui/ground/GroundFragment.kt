@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -21,6 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weg.MainActivity
 import com.example.weg.R
+import com.example.weg.data.PostDataSource
+import com.example.weg.data.Result
 import com.example.weg.databinding.FragmentGroundBinding
 
 
@@ -34,6 +37,8 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
     private lateinit var recyclerView: RecyclerView;
     private lateinit var adapter: PostRecyclerAdapter;
 
+    val postDataSource = PostDataSource();
+
     var postList : ArrayList<PostRecyclerItem> = ArrayList<PostRecyclerItem>();
 
     override fun onCreateView(
@@ -44,19 +49,17 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
 
         _binding = FragmentGroundBinding.inflate(inflater, container, false)
         val root: View = binding.root;
-        postList.add(PostRecyclerItem("Jihwan", "첫번째 일기", "집에 보내주세요!", arrayListOf("Apple", "Banana", "Orange")));
-        postList.add(PostRecyclerItem("Yejin", "두번째 일기", "집에 보내주세요!", arrayListOf("Apple", "Banana", "Orange")));
-        postList.add(PostRecyclerItem("Jihwan", "첫번째 일기", "집에 보내주세요!", arrayListOf("Apple", "Banana", "Orange")));
-        postList.add(PostRecyclerItem("Yejin", "두번째 일기", "집에 보내주세요!", arrayListOf("Apple", "Banana", "Orange")));
-
-        binding.postRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-        recyclerView = binding.postRecycler;
-        adapter = PostRecyclerAdapter(postList, this);
-        Log.d("TAG", "this is the size of groupMemList : " + adapter.getItemCount());
-        recyclerView.layoutManager = LinearLayoutManager(context);
-        recyclerView.adapter = adapter;
 
         val mainActivity = activity as MainActivity;
+        postDataSource.getAllPost(mainActivity.getCurrentGroup()){
+            if(it is Result.Success){
+                postList.clear();
+                for(item in it.data){
+                    postList.add(item);
+                }
+                updatePostRecyclerView();
+            }
+        }
 
         val toolbar = mainActivity.findViewById<Toolbar>(R.id.toolbar)
         val menu = toolbar.menu
@@ -75,6 +78,14 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
         _binding = null
     }
 
+    private fun updatePostRecyclerView(){
+        binding.postRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+        recyclerView = binding.postRecycler;
+        adapter = PostRecyclerAdapter(postList, this);
+        Log.d("TAG", "this is the size of groupMemList : " + adapter.getItemCount());
+        recyclerView.layoutManager = LinearLayoutManager(context);
+        recyclerView.adapter = adapter;
+    }
     private fun initMenu(menuhost: MenuHost) {
         menuhost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

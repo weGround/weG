@@ -26,22 +26,25 @@ import com.example.weg.ui.sideSheet.GroupListFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding;
-    private var userId : String? = null;
+    private var currentUserId : String? = null;
     private var currentGroup : String? = null;
     private val requestCode = 123;
 
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            userId = result.data?.getStringExtra("userId")
+            currentUserId = result.data?.getStringExtra("userId")
             // 수신된 데이터 처리
             val welcome = getString(R.string.welcome)
             Toast.makeText(
                 applicationContext,
-                "$welcome $userId",
+                "$welcome $currentUserId",
                 Toast.LENGTH_LONG
             ).show()
             val groupListFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as GroupListFragment;
-            groupListFragment.initGroupList();
+            groupListFragment.initGroupList(0);
+            currentGroup = groupListFragment.getGroupNameByIndex(0);
+            onGroupChanged(currentGroup);
+
         }
     }
 
@@ -108,7 +111,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getUserId() : String?{
-        return this.userId;
+        return this.currentUserId;
+    }
+    fun getCurrentGroup() : String?{
+        return this.currentGroup;
     }
 
 
@@ -124,14 +130,12 @@ class MainActivity : AppCompatActivity() {
         groupListFragment.makeGroup(newGroupName);
     }
 
-    fun onGroupChanged(newGroupName: String){
+    fun onGroupChanged(newGroupName: String?){
         currentGroup = newGroupName;
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val homeFragment = navHostFragment.childFragmentManager.fragments[0] as HomeFragment
         val homeMainFragment = homeFragment.childFragmentManager.findFragmentById(R.id.fragmentContainer) as HomeMainFragment;
-
         homeMainFragment.onGroupChanged(newGroupName);
-
     }
 
 }

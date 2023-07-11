@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weg.MainActivity
 import com.example.weg.ProfData
 import com.example.weg.R
+import com.example.weg.data.HomeDataSource
+import com.example.weg.data.Result
 import com.example.weg.databinding.FragmentHomeBinding
 import com.example.weg.databinding.FragmentHomeMainBinding
 import com.example.weg.ui.sideSheet.GroupRecyclerItem
@@ -29,12 +31,13 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
     private lateinit var adapter: HomeMemberRecyclerAdapter;
     private var _binding: FragmentHomeMainBinding? = null
 
+    private val homeDataSource = HomeDataSource();
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
     // member data lists
     private lateinit var groupName : String;
-    private lateinit var groupIntro : String;
+    private lateinit var groupInfo : String;
     private lateinit var groupImage : Drawable;
     var groupMemList : ArrayList<ProfData> = ArrayList<ProfData>();
 
@@ -64,13 +67,7 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
         groupMemList.add(ProfData("PARK", "I'm jinah", null));
         groupMemList.add(ProfData("Kwon", "I'm yejin", null));
 
-        binding.groupRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.HORIZONTAL))
-
-        recyclerView = binding.groupRecycler;
-        adapter = HomeMemberRecyclerAdapter(groupMemList, this);
-        Log.d("TAG", "this is the size of groupMemList : " + adapter.getItemCount());
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.adapter = adapter;
+        updateMemListView();
 
         val mainActivity = activity as MainActivity;
 
@@ -89,10 +86,45 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
         // TODO("Not yet implemented")
     }
 
-    fun onGroupChanged(newGroupName : String){
-        Toast.makeText(activity, "Group Change : " + newGroupName, Toast.LENGTH_SHORT).show()
-        
+    fun onGroupChanged(newGroupName : String?){
+        if(newGroupName == null){
+            binding.groupName.text = "No data";
+        }else{
+            Toast.makeText(activity, "Group Change : " + newGroupName, Toast.LENGTH_SHORT).show()
+            binding.groupName.text = newGroupName;
+            homeDataSource.getGroupInfo(newGroupName){
+                if(it is Result.Success){
+                    binding.groupInfo.text = it.data;
+                }
+            }
+            homeDataSource.getGroupMem(newGroupName){ result ->
+                if(result is Result.Success){
+                    groupMemList.clear();
+                    for(item in result.data) {
+                        homeDataSource.getUserDetail(item) {
+                            if(it is Result.Success){
+                                groupMemList.add(ProfData(item, it.data, null))
+                            }
+                        }
+                    }
+                }
+                updateMemListView();
+            }
+        }
     }
 
+    private fun updateMemListView() {
+
+//        if (!recyclerView.isComputingLayout && !recyclerView.isLayoutRequested) {
+//            binding.groupRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.HORIZONTAL))
+//        }
+
+        binding.groupRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.HORIZONTAL))
+        recyclerView = binding.groupRecycler;
+        adapter = HomeMemberRecyclerAdapter(groupMemList, this);
+        Log.d("TAG", "this is the size of groupMemList : " + adapter.getItemCount());
+        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = adapter;
+    }
 
 }

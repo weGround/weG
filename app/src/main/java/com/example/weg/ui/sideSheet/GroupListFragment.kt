@@ -26,7 +26,6 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
 
     private val groupDataSource = groupDataSource();
 
-    private lateinit var currentGroup : GroupRecyclerItem;
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -55,7 +54,6 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
         mList.add(GroupRecyclerItem("Section 9", drawable));
         mList.add(GroupRecyclerItem("Section 10", drawable));
         binding.groupRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-        currentGroup = mList[0];
         updateAdapter();
 
         // Register Button clilck event
@@ -84,24 +82,24 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
         adapter = GroupRecyclerAdapter(mList, this);
         Log.d("TAG", "this is the size of mlist : " + adapter.getItemCount());
         recyclerView.layoutManager = LinearLayoutManager(context)
-        //  inflater.inflate(R.layout.fragment_group_list, container, false)
-        // adapter 설정은 항상 위 코드 이후에 수행 되어야하며 따라서 위에서 binding.root를 함
-//        recyclerView.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+
         recyclerView.adapter = adapter;
     }
 
     override fun onItemClick(position: Int) {
-        Toast.makeText(activity, mList.get(position).getGroupName() + " is Selected", Toast.LENGTH_SHORT).show();
-        Toast.makeText(activity, "Move to " + mList.get(position).getGroupName(), Toast.LENGTH_SHORT).show();
-        currentGroup = mList[position];
-        Log.d("list", "This is current group : " + currentGroup.getGroupName());
+//        Toast.makeText(activity, mList.get(position).getGroupName() + " is Selected", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(activity, "Move to " + mList.get(position).getGroupName(), Toast.LENGTH_SHORT).show();
+//        Log.d("list", "This is current group : " + mList[position].getGroupName());
+        sortWithCurrentGroup(position);
+        moveGroup(mList[0].getGroupName());
+        updateAdapter();
+    }
 
+    private fun sortWithCurrentGroup(position:Int){
+        val currentGroup = mList[position];
         mList.removeAt(position);
         mList.add(0, currentGroup);
         mList.subList(1, mList.size).sortWith(compareBy { it.getGroupName() });
-
-        moveGroup(currentGroup.getGroupName());
-        updateAdapter();
     }
 
     override fun onDestroyView() {
@@ -109,13 +107,17 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
         _binding = null;
     }
 
-    fun initGroupList(){
+    // server로 부터 Group List를 가져와서 idx의 group으로 이동함을 가정하고 나머지를 나열한다.
+    fun initGroupList(currentGroupIndex : Int){
         groupDataSource.getGroupList {
             if(it is Result.Success){
+                mList.clear();
                 for(item in it.data){
                     val drawable : Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.ic_macbook);
                     mList.add(GroupRecyclerItem(item, drawable));
                 }
+                sortWithCurrentGroup(currentGroupIndex);
+                updateAdapter();
             }
         }
     }
@@ -135,5 +137,12 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
     fun moveGroup(newGroupName: String){
         val mainActivity = activity as MainActivity;
         mainActivity.onGroupChanged(newGroupName);
+    }
+
+    fun getGroupNameByIndex(groupIndex:Int) : String?{
+        if(mList.size <= groupIndex) {
+            return null;
+        }
+        return mList[groupIndex].getGroupName();
     }
 }
