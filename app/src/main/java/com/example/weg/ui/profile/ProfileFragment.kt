@@ -17,7 +17,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.weg.MainActivity
+import com.example.weg.ProfileData
 import com.example.weg.R
+import com.example.weg.data.PostDataSource
+import com.example.weg.data.ProfileDataSource
+import com.example.weg.data.Result
 import com.example.weg.databinding.FragmentProfileBinding
 
 
@@ -34,7 +38,7 @@ class ProfileFragment : Fragment() {
     private lateinit var userIntro : String;
     private var userImage : Drawable? = null;
 
-
+    val profileDataSource = ProfileDataSource();
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,10 +82,15 @@ class ProfileFragment : Fragment() {
                 layoutParams.topToBottom = R.id.profile_name;
                 introTextView.layoutParams = layoutParams;
 
-                val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(editNameText.windowToken, 0)
-                userName = newName
-
+                val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager;
+                imm.hideSoftInputFromWindow(editNameText.windowToken, 0);
+                userName = newName;
+                val mainActivity = activity as MainActivity;
+                profileDataSource.modifyUserNickName(userName, mainActivity.getUserId(), mainActivity.getCurrentGroup()){
+                    if(it is Result.Success){
+                        Toast.makeText(activity, "Your New Name : ${it.data}", Toast.LENGTH_SHORT).show()
+                    }
+                }
                 // TODO : data base에 이름 변경 요청보내기
                 true
             } else {
@@ -114,6 +123,12 @@ class ProfileFragment : Fragment() {
                 val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(profileIntroEdit.windowToken, 0)
                 userIntro = newIntro;
+                val mainActivity = activity as MainActivity;
+                profileDataSource.modifyUserDetail(userIntro, mainActivity.getUserId(), mainActivity.getCurrentGroup()){
+                    if(it is Result.Success){
+                        Toast.makeText(activity, "Your New Intro : ${it.data}", Toast.LENGTH_SHORT).show()
+                    }
+                }
                 // TODO : data base에 intro 변경 요청보내기
                 true
             } else {
