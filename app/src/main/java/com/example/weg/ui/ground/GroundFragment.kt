@@ -94,7 +94,7 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 val actionBar = (activity as AppCompatActivity).supportActionBar
                 actionBar?.setDisplayHomeAsUpEnabled(false)
-                actionBar?.title = "Contacts"
+                // actionBar?.title = "Contacts"
 
                 menuInflater.inflate(R.menu.actionbar_main_menu, menu)
             }
