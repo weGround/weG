@@ -33,9 +33,14 @@ class ProfileDataSource {
             override fun onResponse(call: Call, response: Response) {
                 val responseBody: String = response.body?.string() ?: ""
                 Log.d("get Nickname", "This is responseBody : $responseBody")
-                val jsonObject = JSONObject(responseBody);
-                val nickname = jsonObject.getString("mygroup_nickname");
-                callback(Result.Success(nickname));
+                try{
+                    val jsonObject = JSONObject(responseBody);
+                    val nickname = jsonObject.getString("mygroup_nickname");
+                    callback(Result.Success(nickname));
+                }catch (e:Exception){
+                    callback(Result.Success("No Name"));
+                }
+
             }
         })
     }
@@ -59,9 +64,13 @@ class ProfileDataSource {
 
             override fun onResponse(call: Call, response: Response) {
                 val responseBody: String = response.body?.string() ?: ""
-                val jsonObject = JSONObject(responseBody);
-                val detail = jsonObject.getString("mygroup_detail");
-                callback(Result.Success(detail));
+                try{
+                    val jsonObject = JSONObject(responseBody);
+                    val detail = jsonObject.getString("mygroup_detail");
+                    callback(Result.Success(detail));
+                }catch (e:Exception){
+                    callback(Result.Success("No Detail"));
+                }
             }
         })
     }
