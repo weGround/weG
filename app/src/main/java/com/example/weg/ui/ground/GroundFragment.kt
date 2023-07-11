@@ -3,19 +3,26 @@ package com.example.weg.ui.ground
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weg.MainActivity
 import com.example.weg.R
 import com.example.weg.databinding.FragmentGroundBinding
+
 
 class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
 
@@ -28,6 +35,7 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
     private lateinit var adapter: PostRecyclerAdapter;
 
     var postList : ArrayList<PostRecyclerItem> = ArrayList<PostRecyclerItem>();
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,8 +64,9 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
         if (item != null) {
             item.isVisible = true
         }
+        val menuhost: MenuHost = requireActivity()
+        initMenu(menuhost)
 
-        
         return root
     }
 
@@ -66,6 +75,28 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
         _binding = null
     }
 
+    private fun initMenu(menuhost: MenuHost) {
+        menuhost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                val actionBar = (activity as AppCompatActivity).supportActionBar
+                actionBar?.setDisplayHomeAsUpEnabled(false)
+                actionBar?.title = "Contacts"
+
+                menuInflater.inflate(R.menu.actionbar_main_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                if (menuItem.itemId == R.id.add_action) {
+                    onAddClick();
+                }
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    fun onAddClick(){
+        Log.d("heyhey", "onAddClick: ");
+    }
     override fun onItemClick(position: Int) {
         // TODO("Not yet implemented")
     }
