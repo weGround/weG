@@ -12,15 +12,20 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weg.MainActivity
 import com.example.weg.R
+import com.example.weg.data.Result
+import com.example.weg.data.groupDataSource
 import com.example.weg.databinding.FragmentGroupListBinding
-import java.util.Collections
 
 class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: GroupRecyclerAdapter
     private var _binding: FragmentGroupListBinding? = null
     var mList = ArrayList<GroupRecyclerItem>()
+
+    private val groupDataSource = groupDataSource();
+
     private lateinit var currentGroup : GroupRecyclerItem;
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -52,7 +57,19 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
         binding.groupRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         currentGroup = mList[0];
         updateAdapter();
-        // Inflate the layout for this fragment
+
+        // Register Button clilck event
+        binding.addGroup.setOnClickListener{
+            Toast.makeText(activity, "Button Clicked!", Toast.LENGTH_SHORT).show()
+            val dialogFragment = GroupDialogFragment()
+            dialogFragment.show(childFragmentManager, "Group Add Dialog")
+        }
+
+        binding.makeGroup.setOnClickListener{
+            Toast.makeText(activity, "Button Clicked!", Toast.LENGTH_SHORT).show()
+            val dialogFragment = GroupMakeDialogFragment()
+            dialogFragment.show(childFragmentManager, "Group Make Dialog")
+        }
         return view
     }
 
@@ -83,14 +100,40 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
         mList.add(0, currentGroup);
         mList.subList(1, mList.size).sortWith(compareBy { it.getGroupName() });
 
-        for(item in mList){
-            Log.d("list", item.getGroupName());
-        }
+        moveGroup(currentGroup.getGroupName());
         updateAdapter();
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        _binding = null;
+    }
+
+    fun initGroupList(){
+        groupDataSource.getGroupList {
+            if(it is Result.Success){
+                for(item in it.data){
+                    val drawable : Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.ic_macbook);
+                    mList.add(GroupRecyclerItem(item, drawable));
+                }
+            }
+        }
+    }
+
+    fun addGroup(newGroupName: String) {
+        groupDataSource.addGroup(newGroupName){
+            // todo : add group callback
+        }
+    }
+
+    fun makeGroup(newGroupName: String) {
+        groupDataSource.makeGroup(newGroupName){
+            // todo : add group callback
+        }
+    }
+
+    fun moveGroup(newGroupName: String){
+        val mainActivity = activity as MainActivity;
+        mainActivity.onGroupChanged(newGroupName);
     }
 }

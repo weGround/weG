@@ -8,59 +8,86 @@
     tools:context=".ui.sideSheet.GroupListFragment">
 
     <LinearLayout
-        android:id="@+id/list_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginBottom="80dp">
+        android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/phone_num_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Groups"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="#1C1C1C"
+                android:layout_marginStart="15dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="#CCCCCC" />
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:iconifiedByDefault="false"
+                app:queryHint="검색어를 입력하시오" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/group_recycler"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:id="@+id/phone_num_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Groups"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="#1C1C1C"
-            android:layout_marginStart="15dp"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_weight="1"
+            android:gravity = "center"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" >
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#CCCCCC" />
+            <Button
+                android:id="@+id/add_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/round_button"
+                android:text="그룹 추가" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:iconifiedByDefault="false"
-            app:queryHint="검색어를 입력하시오" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/group_recycler"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            <Button
+                android:id="@+id/make_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/round_button"
+                android:text="그룹 만들기" />
+        </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/add_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/round_button"
-        android:text="그룹 추가"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -89,5 +89,10 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
         // TODO("Not yet implemented")
     }
 
+    fun onGroupChanged(newGroupName : String){
+        Toast.makeText(activity, "Group Change : " + newGroupName, Toast.LENGTH_SHORT).show()
+        
+    }
+
 
 }

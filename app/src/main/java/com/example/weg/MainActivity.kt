@@ -2,10 +2,9 @@ package com.example.weg
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -14,16 +13,21 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.weg.databinding.ActivityMainBinding
+import com.example.weg.ui.home.HomeFragment
+import com.example.weg.ui.home.HomeMainFragment
 import com.example.weg.ui.login.LoginActivity
+import com.example.weg.ui.sideSheet.GroupListFragment
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding;
     private var userId : String? = null;
+    private var currentGroup : String? = null;
     private val requestCode = 123;
 
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -36,6 +40,8 @@ class MainActivity : AppCompatActivity() {
                 "$welcome $userId",
                 Toast.LENGTH_LONG
             ).show()
+            val groupListFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as GroupListFragment;
+            groupListFragment.initGroupList();
         }
     }
 
@@ -103,6 +109,29 @@ class MainActivity : AppCompatActivity() {
 
     fun getUserId() : String?{
         return this.userId;
+    }
+
+
+    fun addGroup(newGroupName : String){
+        Log.d("Add New Group", "addGroup: " + newGroupName);
+        val groupListFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as GroupListFragment;
+        groupListFragment.addGroup(newGroupName);
+    }
+
+    fun makeGroup(newGroupName : String){
+        Log.d("Add New Group", "addGroup: " + newGroupName);
+        val groupListFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as GroupListFragment;
+        groupListFragment.makeGroup(newGroupName);
+    }
+
+    fun onGroupChanged(newGroupName: String){
+        currentGroup = newGroupName;
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+        val homeFragment = navHostFragment.childFragmentManager.fragments[0] as HomeFragment
+        val homeMainFragment = homeFragment.childFragmentManager.findFragmentById(R.id.fragmentContainer) as HomeMainFragment;
+
+        homeMainFragment.onGroupChanged(newGroupName);
+
     }
 
 }
