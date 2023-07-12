@@ -1,5 +1,6 @@
 package com.example.weg.data
 
+import android.util.Log
 import com.example.weg.ui.ground.PostRecyclerItem
 import okhttp3.Call
 import okhttp3.Callback
@@ -55,6 +56,35 @@ class PostDataSource {
         }
     }
 
+    fun getUserNickName(currentUserId:String?,currentGroup:String?,callback: (Result<String>) -> Unit){
+        val url = "http://172.10.5.148:443/signup/getUserMyGroupProfiles/$currentUserId/$currentGroup";
+        Log.d("get Nickname", "This is url : $url")
+        val client = OkHttpClient();
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                callback(Result.Error(IOException(e.message.toString(), e)))
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody: String = response.body?.string() ?: ""
+                Log.d("get Nickname", "This is responseBody : $responseBody")
+                try{
+                    val jsonObject = JSONObject(responseBody);
+                    val nickname = jsonObject.getString("mygroup_nickname");
+                    callback(Result.Success(nickname));
+                }catch (e:Exception){
+                    callback(Result.Success("No Name"));
+                }
+
+            }
+        })
+    }
     fun addNewPost(postWriter:String?,currentGroup:String?, postTitle: String?,postContent: String?,callback: (Result<PostRecyclerItem>) -> Unit) {
         if(postWriter != null && postTitle != null && postContent != null){
             val url = "http://172.10.5.148:443/share";
