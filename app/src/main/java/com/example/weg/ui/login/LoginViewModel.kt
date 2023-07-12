@@ -10,7 +10,6 @@ import com.example.weg.data.Result
 
 import com.example.weg.R
 import com.example.weg.data.model.LoggedInUser
-import java.nio.file.Files.getOwner
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -23,6 +22,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _signUpResult = MutableLiveData<LoginResult>()
     val signUpResult: LiveData<LoginResult> = _signUpResult
 
+    private val _kakaoResult = MutableLiveData<KakaoResult>()
+    val kakaoResult: LiveData<KakaoResult> = _kakaoResult
+
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
         loginRepository.login(this, username, password)
@@ -31,6 +33,11 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     fun signUp(username: String, password: String) {
         // can be launched in a separate asynchronous job
         loginRepository.signUp(this, username, password)
+    }
+    fun tryKakaoLogin(username: String) {
+        // can be launched in a separate asynchronous job
+        Log.d("KAKAO", "Viewmodel kakao login try!!!")
+        loginRepository.tryKakaoLogin(this, username)
     }
 
     fun getLoginCheckResult(result: Result<LoggedInUser>){
@@ -43,13 +50,24 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
-    fun getSignUpCheckResult(result: Result<LoggedInUser>){
+    fun getSignUpCheckResult(result: Result<LoggedInUser>, username: String, password: String){
         if (result is Result.Success) {
             _signUpResult.postValue(LoginResult(success = LoggedInUserView(userId = result.data.userId)));
-        } else {
-            _signUpResult.postValue(LoginResult(error = result.toString()));
+        } else if(result is Result.Error){
+            if(result.exception.message.equals("already exist")){
+//                login(username, password);
+                _signUpResult.postValue(LoginResult(error = "이미 존재하는 계정입니다."));
+            }else{
+                _signUpResult.postValue(LoginResult(error = result.exception.message));
+            }
         }
     }
+    fun getKakaoCheckResult(result: Result<KakaoResult>){
+        if (result is Result.Success) {
+            _kakaoResult.postValue(result.data);
+        }
+    }
+
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
