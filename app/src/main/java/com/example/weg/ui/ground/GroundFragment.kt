@@ -139,10 +139,12 @@ class GroundFragment : Fragment(), PostRecyclerAdapter.OnItemClickListener {
     }
     fun addNewPost(postTitle:String, postContent:String){
         val mainActivity = activity as MainActivity;
-        postDataSource.addNewPost(mainActivity.getUserId(), postTitle, postContent) {
-            if(it is Result.Success){
-                postList.add(it.data);
-                updatePostRecyclerView();
+        postDataSource.addNewPost(mainActivity.getUserId(),mainActivity.getCurrentGroup(), postTitle, postContent) {
+            activity?.runOnUiThread{
+                if(it is Result.Success){
+                    postList.add(it.data);
+                    updatePostRecyclerView();
+                }
             }
         }
     }

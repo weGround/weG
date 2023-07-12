@@ -3,6 +3,7 @@ package com.example.weg.data
 import com.example.weg.ui.ground.PostRecyclerItem
 import okhttp3.Call
 import okhttp3.Callback
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -54,9 +55,34 @@ class PostDataSource {
         }
     }
 
-    fun addNewPost(postWriter:String?, postTitle: String?,postContent: String?,callback: (Result<PostRecyclerItem>) -> Unit) {
+    fun addNewPost(postWriter:String?,currentGroup:String?, postTitle: String?,postContent: String?,callback: (Result<PostRecyclerItem>) -> Unit) {
         if(postWriter != null && postTitle != null && postContent != null){
-            callback(Result.Success(PostRecyclerItem(postWriter!!, postTitle!!, postContent!!, ArrayList<String>())));
+            val url = "http://172.10.5.148:443/share";
+
+            val client = OkHttpClient();
+
+            val requestBody = FormBody.Builder()
+                .add("post_title", postTitle!!)
+                .add("post_group", currentGroup!!)
+                .add("post_detail", postContent)
+                .add("post_writer", postWriter)
+                .build()
+
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                    callback(Result.Error(IOException(e.message.toString(), e)))
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    callback(Result.Success(PostRecyclerItem(postWriter!!, postTitle!!, postContent!!, ArrayList<String>())));
+                }
+            })
+
         }
     }
 }
