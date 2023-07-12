@@ -137,4 +137,8 @@ class MainActivity : AppCompatActivity() {
         val homeMainFragment = homeFragment.childFragmentManager.findFragmentById(R.id.fragmentContainer) as HomeMainFragment;
         homeMainFragment.onGroupChanged(currentGroup);
     }
+    fun onGroupDeleted(){
+        val groupListFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as GroupListFragment;
+        groupListFragment.initGroupList(0, false);
+    }
 }

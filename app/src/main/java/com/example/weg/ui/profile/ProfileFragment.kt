@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import com.example.weg.MainActivity
 import com.example.weg.ProfileData
 import com.example.weg.R
@@ -23,6 +24,8 @@ import com.example.weg.data.PostDataSource
 import com.example.weg.data.ProfileDataSource
 import com.example.weg.data.Result
 import com.example.weg.databinding.FragmentProfileBinding
+import com.example.weg.ui.home.HomeFragment
+import com.example.weg.ui.home.HomeMainFragment
 
 
 class ProfileFragment : Fragment() {
@@ -142,7 +145,8 @@ class ProfileFragment : Fragment() {
             val mainActivity = activity as MainActivity;
             profileDataSource.exitFromGroup(mainActivity.getUserId(), mainActivity.getCurrentGroup()){
                 if(it is Result.Success){
-//                    Toast.makeText(activity, "Exit from here : ${it.data}", Toast.LENGTH_SHORT).show()
+                    val mainActivity = activity as MainActivity;
+                    mainActivity.onGroupDeleted();
                 }
             }
         }
