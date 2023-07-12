@@ -154,16 +154,17 @@ class ProfileFragment : Fragment() {
 
         val mainActivity = activity as MainActivity;
         profileDataSource.getNickname(mainActivity.getUserId(), mainActivity.getCurrentGroup()){
-            if(it is Result.Success){
-                nameText.post{
+            activity?.runOnUiThread{
+                if(it is Result.Success){
                     nameText.text = it.data;
                 }
-
             }
         }
+
+
         profileDataSource.getUserDetail(mainActivity.getUserId(), mainActivity.getCurrentGroup()){
-            if(it is Result.Success){
-                detailText.post{
+            activity?.runOnUiThread{
+                if(it is Result.Success){
                     detailText.text = it.data;
                 }
             }

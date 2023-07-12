@@ -78,25 +78,36 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
             Toast.makeText(activity, "Group Change : " + newGroupName, Toast.LENGTH_SHORT).show()
             binding.groupName.text = newGroupName;
             homeDataSource.getGroupInfo(newGroupName){
-                if(it is Result.Success){
-                    binding.groupInfo.text = it.data;
+                activity?.runOnUiThread {
+                    if(it is Result.Success){
+                        binding.groupInfo.text = it.data;
+                        Log.d("HomeMainFragment", "This is groupInfo : " + it.data);
+                    }
                 }
             }
             homeDataSource.getGroupMem(newGroupName) { result ->
-                if (result is Result.Success) {
-                    groupMemList.clear()
-                    val mainActivity = activity as MainActivity;
-                    for (item in result.data) {
-
-                        homeDataSource.getUserDetail(item, mainActivity.getCurrentGroup()) {
-                            if (it is Result.Success) {
-                                groupMemList.add(ProfData(item, it.data, null))
+                activity?.runOnUiThread {
+                    if (result is Result.Success) {
+                        groupMemList.clear()
+                        val mainActivity = activity as MainActivity;
+                        for (item in result.data) {
+                            Log.d("HomeMainFragment", "This is groupMember : " + item);
+                            homeDataSource.getUserNickName(item, mainActivity.getCurrentGroup()) {
+                                activity?.runOnUiThread {
+                                    if (it is Result.Success) {
+                                        homeDataSource.getUserDetail(it.data, item, mainActivity.getCurrentGroup()) {
+                                            activity?.runOnUiThread {
+                                                if (it is Result.Success) {
+                                                    groupMemList.add(it.data);
+                                                    updateMemListView()
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
-                }
-                activity?.runOnUiThread {
-                    updateMemListView()
                 }
             }
 
