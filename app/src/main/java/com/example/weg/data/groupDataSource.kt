@@ -48,40 +48,55 @@ class groupDataSource {
         })
     }
 
-    fun addGroup(newGroupName: String, callback: (Result<String>) -> Unit)  {
+    fun addGroup(userId:String, newGroupName: String, callback: (Result<String>) -> Unit)  {
         // TODO: handle loggedInUser authentication
-        val url = "http://172.10.5.148:443/signup"
-        val client = OkHttpClient();
+        val groupUrl = "http://172.10.5.148:443/group/updateMems/$newGroupName";
+        val groupJoinUrl = "http://172.10.5.148:443/signup/joinGroup/$userId";
+        val client2 = OkHttpClient();
 
-//        val requestBody = FormBody.Builder()
-//            .add("groupname", username)
-//            .build()
+        val requestBody2 = FormBody.Builder()
+            .add("newmember", userId)
+            .build()
 
-//        val request = Request.Builder()
-//            .url(url)
-//            .post(requestBody)
-//            .build()
-//
-//        client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                e.printStackTrace()
-//                callback(Result.Error(IOException(e.message.toString(), e)))
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                val responseBody: String = response.body?.string() ?: ""
-//                val jsonObject = JSONObject(responseBody)
-//                val msg = jsonObject.getString("message");
-//                if(msg.equals("already exist")){
-//                    Log.d("signup failed", "signup: $msg")
-//                    callback(Result.Error(IOException(msg)))
-//                }else if(msg.equals("signup success")){
-//                    Log.d("signup Success", "signup: $msg")
-//                    val signUpUser = LoggedInUser(username, password);
-//                    callback(Result.Success(signUpUser))
-//                }
-//            }
-//        })
+        val request2 = Request.Builder()
+            .url(groupUrl)
+            .put(requestBody2)
+            .build()
+
+        client2.newCall(request2).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                callback(Result.Error(IOException(e.message.toString(), e)))
+            }
+            override fun onResponse(call: Call, response: Response) {
+                callback(Result.Success(newGroupName));
+            }
+        })
+
+        val client3 = OkHttpClient();
+
+        val requestBody3 = FormBody.Builder()
+            .add("groupname", newGroupName)
+            .build()
+
+        val request3 = Request.Builder()
+            .url(groupJoinUrl)
+            .post(requestBody3)
+            .build()
+
+        client3.newCall(request3).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                callback(Result.Error(IOException(e.message.toString(), e)))
+            }
+            override fun onResponse(call: Call, response: Response) {
+                callback(Result.Success(newGroupName));
+            }
+        })
+
+
+
+
     }
 
     fun makeGroup(newGroupName: String, callback: (Result<String>) -> Unit)  {

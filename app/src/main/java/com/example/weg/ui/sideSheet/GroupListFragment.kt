@@ -135,8 +135,9 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
     }
 
     fun addGroup(newGroupName: String) {
-        groupDataSource.addGroup(newGroupName){
-            // todo : add group callback
+        val mainActivity = activity as MainActivity;
+        groupDataSource.addGroup(mainActivity.getUserId()!!, newGroupName){
+            initGroupList(0, false);
         }
     }
 
