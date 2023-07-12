@@ -173,7 +173,10 @@ class LoginActivity : AppCompatActivity() {
         UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
     }
 
-
+    override fun onBackPressed() {
+        // 여기에 뒤로 가기 버튼을 눌렀을 때 실행할 코드를 작성합니다.
+        // 이 코드를 호출하면 기본 동작인 액티비티 종료가 실행됩니다.
+    }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
