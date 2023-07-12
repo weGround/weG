@@ -16,4 +16,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="already_exist">"already_exist"</string>
+
+    <string name="kakao_app_key">5b6443a2f896a5b82b2196440ddf6df4</string>
+    <string name="kakao_app_key2">kakao5b6443a2f896a5b82b2196440ddf6df4</string>
 </resources>

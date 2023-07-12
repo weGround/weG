@@ -123,8 +123,10 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
                 updateAdapter();
                 if(isFirst){
                     mainActivity.apply{
-                        mainActivity.setCurrentGroup(getGroupNameByIndex(0)!!);
-                        onGroupChanged(mainActivity.getCurrentGroup());
+                        if(mList.size > 0){
+                            mainActivity.setCurrentGroup(getGroupNameByIndex(0)!!);
+                            onGroupChanged(mainActivity.getCurrentGroup());
+                        }
                     }
 
                 }

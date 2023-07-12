@@ -1,7 +1,6 @@
 package com.example.weg.data
 
-import android.content.Context
-import android.widget.Toast
+import android.util.Log
 import com.example.weg.data.model.LoggedInUser
 import com.example.weg.ui.login.LoginViewModel
 
@@ -45,7 +44,18 @@ class LoginRepository(val dataSource: LoginDataSource) {
     fun signUp(loginViewModel: LoginViewModel, username: String, password: String) {
         // handle login
         dataSource.signUp(username, password) {
-            loginViewModel.getSignUpCheckResult(it);
+            loginViewModel.getSignUpCheckResult(it, username, password);
+        }
+    }
+
+    fun tryKakaoLogin(loginViewModel: LoginViewModel, userId: String) {
+        // handle login
+        Log.d("KAKAO", "Repository kakao login try!!!")
+        dataSource.getKakaoAlreadyExist(userId) {
+            if(it is Result.Success){
+                Log.d("KAKAO", "Get back the data from datasource request!!!")
+                loginViewModel.getKakaoCheckResult(it)
+            }
         }
     }
 

@@ -1,7 +1,9 @@
 package com.example.weg.data
 
 import android.util.Log
+import com.example.weg.ProfData
 import com.example.weg.data.model.LoggedInUser
+import com.example.weg.ui.login.KakaoResult
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.FormBody
@@ -10,6 +12,7 @@ import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -90,6 +93,38 @@ class LoginDataSource {
             }
         })
 
+    }
+
+    fun getKakaoAlreadyExist(userId: String, callback: (Result<KakaoResult>) -> Unit) {
+        val url = "http://172.10.5.148:443/signup/getUser/$userId";
+
+        val client = OkHttpClient()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                callback(Result.Error(IOException(e.message.toString(), e)))
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody: String = response.body?.string() ?: ""
+
+                try{
+                    val jsonObject = JSONObject(responseBody);
+                    val temp = jsonObject.getString("message");
+                    // 존재하지 않으면 message가 존재
+                    Log.d("KAKAO", "message가 있다있다!! result가 false야")
+                    callback(Result.Success(KakaoResult(false, userId, "kakaopwd$userId")));
+                }catch (e:Exception){
+                    Log.d("KAKAO", "message가 없다 없다!! result가 true야")
+                    callback(Result.Success(KakaoResult(true, userId, "kakaopwd$userId")));
+                }
+            }
+        })
     }
 
     fun logout() {
