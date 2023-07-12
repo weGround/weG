@@ -53,28 +53,13 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
         _binding = FragmentHomeMainBinding.inflate(inflater, container, false)
 
         val root: View = binding.root;
-//        val actionBar = (activity as AppCompatActivity).supportActionBar
-//        actionBar?.apply {
-//            setDisplayHomeAsUpEnabled(true)
-//            setHomeAsUpIndicator(R.drawable.ic_android)
-//        }
-//        groupMemList.add(ProfData("jihwan", "I'm jihwan", null));
-//        groupMemList.add(ProfData("yinae", "I'm yinae", null));
-//        groupMemList.add(ProfData("jinah", "I'm jinah", null));
-//        groupMemList.add(ProfData("yejin", "I'm yejin", null));
-//        groupMemList.add(ProfData("OH", "I'm jihwan", null));
-//        groupMemList.add(ProfData("Park", "I'm yinae", null));
-//        groupMemList.add(ProfData("PARK", "I'm jinah", null));
-//        groupMemList.add(ProfData("Kwon", "I'm yejin", null));
-
-//        updateMemListView();
 
         val mainActivity = activity as MainActivity;
-
+        onGroupChanged(mainActivity.getCurrentGroup());
         val toolbar = mainActivity.findViewById<Toolbar>(R.id.toolbar)
         val menu = toolbar?.menu;
         val item = menu?.findItem(R.id.add_action)
-//        val item = toolbar?.findViewById<View>(R.id.add_action)
+
         if (item != null) {
             item.isVisible = false;
         }
@@ -100,8 +85,10 @@ class HomeMainFragment : Fragment(), HomeMemberRecyclerAdapter.OnItemClickListen
             homeDataSource.getGroupMem(newGroupName) { result ->
                 if (result is Result.Success) {
                     groupMemList.clear()
+                    val mainActivity = activity as MainActivity;
                     for (item in result.data) {
-                        homeDataSource.getUserDetail(item) {
+
+                        homeDataSource.getUserDetail(item, mainActivity.getCurrentGroup()) {
                             if (it is Result.Success) {
                                 groupMemList.add(ProfData(item, it.data, null))
                             }

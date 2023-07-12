@@ -16,28 +16,33 @@ class HomeDataSource {
 
     fun getGroupInfo(groupName: String,callback: (Result<String>) -> Unit) {
 
-//        // TODO: handle loggedInUser authentication
-        val infoStr = "Our Group Name is $groupName";
-        callback(Result.Success(infoStr));
-//        val url = "http://172.10.5.148:443/group/getMems/$groupName";
-//
-//        val client = OkHttpClient();
-//
-//        val request = Request.Builder()
-//            .url(url)
-//            .build()
-//
-//        client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                e.printStackTrace()
-//                callback(Result.Error(IOException(e.message.toString(), e)))
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                val responseBody: String = response.body?.string() ?: ""
-//                callback(Result.Success(responseBody));
-//            }
-//        })
+        val url = "http://172.10.5.148:443/group/getGroup/$groupName";
+        Log.d("get Nickname", "This is url : $url")
+        val client = OkHttpClient();
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                callback(Result.Error(IOException(e.message.toString(), e)))
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody: String = response.body?.string() ?: ""
+                Log.d("get Nickname", "This is responseBody : $responseBody")
+                try{
+                    val jsonObject = JSONObject(responseBody);
+                    val groupInfo = jsonObject.getString("groupinfo");
+                    callback(Result.Success(groupInfo));
+                }catch (e:Exception){
+                    callback(Result.Success("No Info"));
+                }
+
+            }
+        })
     }
     fun getGroupMem(groupName: String,callback: (Result<ArrayList<String>>) -> Unit) {
 
@@ -68,34 +73,32 @@ class HomeDataSource {
         })
     }
 
-    fun getUserDetail(userName: String,callback: (Result<String>) -> Unit) {
+    fun getUserDetail(currentUserId : String?, currentGroupName : String?, callback: (Result<String>) -> Unit) {
+        val url = "http://172.10.5.148:443/signup/getUserMyGroupProfiles/$currentUserId/$currentGroupName";
 
-//        // TODO: handle loggedInUser authentication
-        callback(Result.Success("My name is $userName"));
-//        val url = "http://172.10.5.148:443/signUp/detail/" + userName;
-//
-//        val client = OkHttpClient();
-//
-//        val request = Request.Builder()
-//            .url(url)
-//            .build()
-//
-//        client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                e.printStackTrace()
-//                callback(Result.Error(IOException(e.message.toString(), e)))
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                val responseBody: String = response.body?.string() ?: ""
-//                val jsonArray = JSONArray(responseBody);
-//                var memList : ArrayList<String> = ArrayList<String>();
-//                for (i in 0 until jsonArray.length()) {
-//                    memList.add(jsonArray.get(i).toString())
-//                }
-//                callback(Result.Success(memList));
-//            }
-//        })
+        val client = OkHttpClient();
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                callback(Result.Error(IOException(e.message.toString(), e)))
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody: String = response.body?.string() ?: ""
+                try{
+                    val jsonObject = JSONObject(responseBody);
+                    val detail = jsonObject.getString("mygroup_detail");
+                    callback(Result.Success(detail));
+                }catch (e:Exception){
+                    callback(Result.Success("No Detail"));
+                }
+            }
+        })
     }
 
 }

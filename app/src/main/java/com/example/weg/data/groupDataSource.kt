@@ -1,6 +1,7 @@
 package com.example.weg.data
 
 import android.util.Log
+import android.widget.Toast
 import com.example.weg.data.model.LoggedInUser
 import okhttp3.Call
 import okhttp3.Callback
@@ -37,6 +38,7 @@ class groupDataSource {
                     for (i in 0 until jsonArray.length()) {
                         groupList.add(jsonArray.get(i).toString())
                     }
+                    Log.d("GroupDataSource", "THis is the size of real group list : " + groupList.size)
                     callback(Result.Success(groupList));
                 }catch (e:Exception){
                     callback(Result.Success(ArrayList<String>()));

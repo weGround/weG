@@ -41,9 +41,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
             val groupListFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as GroupListFragment;
-            groupListFragment.initGroupList(0);
-            currentGroup = groupListFragment.getGroupNameByIndex(0);
-            onGroupChanged(currentGroup);
+            groupListFragment.initGroupList(0, true);
 
         }
     }
@@ -117,7 +115,9 @@ class MainActivity : AppCompatActivity() {
         return this.currentGroup;
     }
 
-
+    fun setCurrentGroup(currentGroup:String){
+        this.currentGroup = currentGroup;
+    }
     fun addGroup(newGroupName : String){
         Log.d("Add New Group", "addGroup: " + newGroupName);
         val groupListFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as GroupListFragment;
@@ -135,6 +135,6 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val homeFragment = navHostFragment.childFragmentManager.fragments[0] as HomeFragment
         val homeMainFragment = homeFragment.childFragmentManager.findFragmentById(R.id.fragmentContainer) as HomeMainFragment;
-        homeMainFragment.onGroupChanged(newGroupName);
+        homeMainFragment.onGroupChanged(currentGroup);
     }
 }

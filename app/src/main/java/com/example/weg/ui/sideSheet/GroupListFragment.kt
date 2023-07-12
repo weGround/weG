@@ -72,13 +72,6 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
         }
         return view
     }
-
-    private fun updateGroupList(groupList: ArrayList<GroupRecyclerItem>) {
-        mList.clear();
-        mList = groupList;
-        updateAdapter();
-    }
-
     private fun updateAdapter() {
         recyclerView = binding.groupRecycler;
         adapter = GroupRecyclerAdapter(mList, this);
@@ -99,10 +92,12 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
     }
 
     private fun sortWithCurrentGroup(position:Int){
-        val currentGroup = mList[position];
-        mList.removeAt(position);
-        mList.add(0, currentGroup);
-        mList.subList(1, mList.size).sortWith(compareBy { it.getGroupName() });
+        if(mList.size > position){
+            val currentGroup = mList[position];
+            mList.removeAt(position);
+            mList.add(0, currentGroup);
+            mList.subList(1, mList.size).sortWith(compareBy { it.getGroupName() });
+        }
     }
 
     override fun onDestroyView() {
@@ -111,7 +106,7 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
     }
 
     // server로 부터 Group List를 가져와서 idx의 group으로 이동함을 가정하고 나머지를 나열한다.
-    fun initGroupList(currentGroupIndex : Int){
+    fun initGroupList(currentGroupIndex : Int, isFirst:Boolean){
         val mainActivity = activity as MainActivity;
         groupDataSource.getGroupList(mainActivity.getUserId()) {
             if(it is Result.Success){
@@ -121,7 +116,18 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
                     mList.add(GroupRecyclerItem(item, drawable));
                 }
                 sortWithCurrentGroup(currentGroupIndex);
+
+            }
+            activity?.runOnUiThread{
+                Toast.makeText(activity, "This is the size of group list : " + mList.size, Toast.LENGTH_SHORT).show();
                 updateAdapter();
+                if(isFirst){
+                    mainActivity.apply{
+                        mainActivity.setCurrentGroup(getGroupNameByIndex(0)!!);
+                        onGroupChanged(mainActivity.getCurrentGroup());
+                    }
+
+                }
             }
         }
     }
@@ -143,10 +149,14 @@ class GroupListFragment : Fragment(), GroupRecyclerAdapter.OnItemClickListener{
         mainActivity.onGroupChanged(newGroupName);
     }
 
-    fun getGroupNameByIndex(groupIndex:Int) : String?{
+    private fun getGroupNameByIndex(groupIndex:Int) : String?{
         if(mList.size <= groupIndex) {
+            val temp = mList.size;
+            Log.d("getGroupNameByIndex", "This is Group index : $temp")
+            Log.d("getGroupNameByIndex", "This is Group index : $groupIndex")
             return null;
         }
+        Log.d("getGroupNameByIndex", "null 이야 null 이야 null 이야 null 이야 null 이야 null 이야 ")
         return mList[groupIndex].getGroupName();
     }
 }
