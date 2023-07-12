@@ -99,39 +99,74 @@ class groupDataSource {
 
     }
 
-    fun makeGroup(newGroupName: String, callback: (Result<String>) -> Unit)  {
+    fun makeGroup(newGroupName: String, newUserId:String, callback: (Result<String>) -> Unit)  {
         // TODO: handle loggedInUser authentication
-        val url = "http://172.10.5.148:443/signup"
+        val createGroupUrl = "http://172.10.5.148:443/group";
+
+        val client2 = OkHttpClient();
+
+        val requestBody2 = FormBody.Builder()
+            .add("groupname", newGroupName)
+            .add("groupinfo", "Our Group is $newGroupName")
+            .build()
+
+        val request2 = Request.Builder()
+            .url(createGroupUrl)
+            .post(requestBody2)
+            .build()
+
+        client2.newCall(request2).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                callback(Result.Error(IOException(e.message.toString(), e)))
+            }
+            override fun onResponse(call: Call, response: Response) {
+                callback(Result.Success(newGroupName));
+            }
+        })
+
+        val groupJoinUrl = "http://172.10.5.148:443/group/updateMems/$newGroupName";
         val client = OkHttpClient();
 
-//        val requestBody = FormBody.Builder()
-//            .add("groupname", username)
-//            .build()
+        val requestBody = FormBody.Builder()
+            .add("newmember", newUserId)
+            .build()
 
-//        val request = Request.Builder()
-//            .url(url)
-//            .post(requestBody)
-//            .build()
-//
-//        client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                e.printStackTrace()
-//                callback(Result.Error(IOException(e.message.toString(), e)))
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                val responseBody: String = response.body?.string() ?: ""
-//                val jsonObject = JSONObject(responseBody)
-//                val msg = jsonObject.getString("message");
-//                if(msg.equals("already exist")){
-//                    Log.d("signup failed", "signup: $msg")
-//                    callback(Result.Error(IOException(msg)))
-//                }else if(msg.equals("signup success")){
-//                    Log.d("signup Success", "signup: $msg")
-//                    val signUpUser = LoggedInUser(username, password);
-//                    callback(Result.Success(signUpUser))
-//                }
-//            }
-//        })
+        val request = Request.Builder()
+            .url(groupJoinUrl)
+            .put(requestBody)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                callback(Result.Error(IOException(e.message.toString(), e)))
+            }
+            override fun onResponse(call: Call, response: Response) {
+                callback(Result.Success(newGroupName));
+            }
+        })
+
+        val groupJoinUserUrl = "http://172.10.5.148:443/signup/joinGroup/$newUserId";
+        val client3 = OkHttpClient();
+
+        val requestBody3 = FormBody.Builder()
+            .add("groupname", newGroupName)
+            .build()
+
+        val request3 = Request.Builder()
+            .url(groupJoinUserUrl)
+            .post(requestBody3)
+            .build()
+
+        client3.newCall(request3).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                callback(Result.Error(IOException(e.message.toString(), e)))
+            }
+            override fun onResponse(call: Call, response: Response) {
+                callback(Result.Success(newGroupName));
+            }
+        })
     }
 }
